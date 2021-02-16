@@ -43,12 +43,15 @@ function Cards() {
   const classes = useStyles();
   const butDisabled = useContext(CardsContext);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [showPop, setShowPop] = useState({});
 
-  const handleClick = (event) => {
+  const handleClick = (index, event) => {
+    setShowPop(() => ({ [index]: true }));
     setAnchorEl(event.currentTarget);
   };
 
   const handleClose = () => {
+    setShowPop({});
     setAnchorEl(null);
   };
 
@@ -77,23 +80,23 @@ function Cards() {
                 className={classes.root}
               >
                 <Button
-                  disabled={butDisabled ? false : true}
+                  disabled={butDisabled[0] ? true : false}
                   aria-describedby={id}
-                  onClick={handleClick}
+                  onClick={(e)=> handleClick(index,e)}
                 >
                   Admin
                 </Button>
-                <Button disabled={butDisabled ? false : true}>Logged in</Button>
+                <Button disabled={butDisabled[0] ? true : false}>Logged in</Button>
                 <Button
-                  disabled={butDisabled ? true : false}
-                  onClick={handleClick}
+                  disabled={butDisabled[0] ? false : true}
+                  onClick={(e)=> handleClick(index,e)}
                 >
                   Guest
                 </Button>
               </ButtonGroup>
               <Popover
                 id={id}
-                open={open}
+                open={showPop[index]}
                 anchorEl={anchorEl}
                 onClose={handleClose}
                 anchorOrigin={{
@@ -106,7 +109,7 @@ function Cards() {
                 }}
               >
                 <Typography className={classes.typography}>
-                  {butDisabled
+                  {butDisabled[0]
                     ? ` Hi ${user} you are logged in welcome!`
                     : "Why you no log in, stupid..."}
                 </Typography>
